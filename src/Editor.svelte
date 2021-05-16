@@ -1,7 +1,6 @@
 <script>
 	import Field from './Field.svelte';
-
-		import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
 	export let value = {};
@@ -31,17 +30,17 @@ $:entries = Object.entries(value||{});
 
 
 </script>
-
+<svelte:options tag="json-editor"/>
 {#each entries as [key,val]}
 	{#if isObject(val)}
-		<svelte:self value={val}  on:update={update} path={getPath(path,key)} />
+		<svelte:self value={val} on:update={update} path={getPath(path,key)} />
 	{:else if Array.isArray(val)}
 		{#each val.filter(isObject) as entry,index}
 			<svelte:self value={entry}  on:update={update} path={getPath(path,key,index)} />
 		{/each}
 		<svelte:self value={val.filter(e=>!isObject(e))}  on:update={update} path={getPath(path,key)} />
 	{:else}
-	<Field on:fieldUpdated={update} {key} path={getPath(path,key)} value={val}/>
+	<Field on:fieldUpdated={update} path={getPath(path,key)} value={val}/>
 	{/if}
 {/each}
 

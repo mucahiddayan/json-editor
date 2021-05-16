@@ -33,7 +33,6 @@
 
 		try{
 		parsed = JSON.parse(json);
-					console.log(parsed)
 		}catch(er){
 			error = `${er.message} => "${json}"`;
 		}
@@ -43,7 +42,6 @@
 
 	function updatePreview({detail}){
 		// parsed = detail;
-		console.log(detail.path,detail.value);
 		set(parsed,detail.path,detail.value);
 		preview = JSON.stringify(parsed);
 	}
@@ -57,6 +55,7 @@
 	}
 
 </script>
+<svelte:options tag="json-editor-wrapper"/>
 <Editor value={parsed} on:update={updatePreview}/>
 {#if error}
 	{error}

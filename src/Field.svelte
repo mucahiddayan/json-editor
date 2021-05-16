@@ -1,11 +1,12 @@
 <style>
-	.field{}
+	.field{
+		margin: var(--field-margin);
+	}
 </style>
 <script>
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let key;
 	export let value;
 		export let path;
 
@@ -53,12 +54,12 @@
 
 	function submit(event){
 		const val = getType(value) === 'checkbox'? event.target.checked:getType(value) === 'multiselect'?getSelectedOptions(event.target):event.target.value;
-		console.log('val',val);
 		dispatch('fieldUpdated',{value:val, path})
 	}
 
 </script>
 
+<svelte:options tag="json-editor-field"/>
 <div class="field" data-path={path}>
 	<label for={path}>{path}</label>
 	{#if getType(value) === 'textarea'}
