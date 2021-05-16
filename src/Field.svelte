@@ -7,8 +7,9 @@
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 
-	export let value;
-		export let path;
+	export let value = {};
+	export let config = {};
+	export let path = '';
 
 	const typeMapper = {
 		string: 'text',
@@ -24,7 +25,7 @@
 		if(val === 'true'|| val ==='false'){
 			return typeMapper['boolean'];
 		}
-		if(/([\.|\\|\/]\d{1,4})+$/g.test(val) && !isNaN(parseInt(val)) && new Date(val).toString() !== "Invalid Date"){
+		if(/([\.|\\|\/|-]\d{1,4})+$/g.test(val) && !isNaN(parseInt(val)) && new Date(val).toString() !== "Invalid Date"){
 		 return typeMapper['date'];
 		}
 		if(Array.isArray(val)){
@@ -37,10 +38,18 @@
 		return type;
 	}
 
+	function dateToDateInput(date){
+		const parts = new Intl.DateTimeFormat('uk',{}).formatToParts(date);
+		const d = new Proxy(parts, {get(o,f){
+			return o.find(e=> e.type===f).value;
+		}})
+		return `${d.year}-${d.month}-${d.day}`
+	}
+
 	function getValue(val){
 		const type = getType(value);
 		if(type === 'date'){
-			return new Date(val);
+			return dateToDateInput(new Date(val));
 		}
 		if(type === 'boolean'){
 			return val === 'true';
@@ -53,15 +62,16 @@
 	}
 
 	function submit(event){
-		const val = getType(value) === 'checkbox'? event.target.checked:getType(value) === 'multiselect'?getSelectedOptions(event.target):event.target.value;
-		dispatch('fieldUpdated',{value:val, path})
+		const type = getType(value);
+		const val =  type=== 'checkbox'? event.target.checked:type === 'multiselect'?getSelectedOptions(event.target):event.target.value;
+		dispatch('fieldUpdated',{value:type === 'number'?parseFloat(val):val, path})
 	}
 
 </script>
 
 <svelte:options tag="json-editor-field"/>
 <div class="field" data-path={path}>
-	<label for={path}>{path}</label>
+{#if !config.hideLabel}<label for={path}>{path}</label>{/if}
 	{#if getType(value) === 'textarea'}
 	<textarea on:blur={submit} {value} placeholder={path} id={path}/>
 	{:else if getType(value) === 'multiselect'}
@@ -71,7 +81,7 @@
 			{/each}
 		</select>
 	{:else}
-		<input on:blur={submit} on:change={submit} placeholder={path} id={path} type={getType(value)} value={getValue(value)} checked={getType(value)}/>
+		<input on:blur={submit} on:change={submit} placeholder={path} id={path} type={getType(value)} value={getValue(value)} data-value={getValue(value)} checked={getType(value)}/>
 	{/if}
 
 </div>

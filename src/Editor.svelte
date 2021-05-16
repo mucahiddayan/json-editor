@@ -4,7 +4,8 @@
 	const dispatch = createEventDispatcher();
 
 	export let value = {};
-	export let path;
+	export let path = '';
+	export let config={};
 	let entries = [];
 
 
@@ -33,14 +34,14 @@ $:entries = Object.entries(value||{});
 <svelte:options tag="json-editor"/>
 {#each entries as [key,val]}
 	{#if isObject(val)}
-		<svelte:self value={val} on:update={update} path={getPath(path,key)} />
+		<svelte:self value={val} on:update={update} path={getPath(path,key)} {config}/>
 	{:else if Array.isArray(val)}
 		{#each val.filter(isObject) as entry,index}
-			<svelte:self value={entry}  on:update={update} path={getPath(path,key,index)} />
+			<svelte:self value={entry}  on:update={update} path={getPath(path,key,index)} {config}/>
 		{/each}
-		<svelte:self value={val.filter(e=>!isObject(e))}  on:update={update} path={getPath(path,key)} />
+		<svelte:self value={val.filter(e=>!isObject(e))}  on:update={update} path={getPath(path,key)} {config}/>
 	{:else}
-	<Field on:fieldUpdated={update} path={getPath(path,key)} value={val}/>
+	<Field on:fieldUpdated={update} path={getPath(path,key)} value={val} {config}/>
 	{/if}
 {/each}
 
