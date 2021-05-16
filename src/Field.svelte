@@ -10,6 +10,9 @@
 	export let value = {};
 	export let config = {};
 	export let path = '';
+	export let key='';
+
+	let invalid=false;
 
 	const typeMapper = {
 		string: 'text',
@@ -31,14 +34,22 @@
 		if(Array.isArray(val)){
 			return typeMapper['multiselect']
 		}
-		const type =  typeMapper[typeof val];
+		const type =  byKey() || typeMapper[typeof val];
 		if(type === 'text' && val.length > 50){
 			return typeMapper['multiline'];
 		}
 		return type;
 	}
 
+	function byKey(){
+		return ['email','date','password'].find(_=> _ === key)
+
+	}
+
 	function dateToDateInput(date){
+		if(date.toString() === 'Invalid Date'){
+			return
+		}
 		const parts = new Intl.DateTimeFormat('uk',{}).formatToParts(date);
 		const d = new Proxy(parts, {get(o,f){
 			return o.find(e=> e.type===f).value;
@@ -67,6 +78,15 @@
 		dispatch('fieldUpdated',{value:type === 'number'?parseFloat(val):val, path})
 	}
 
+	function validate({target:{value:val}}){
+		const type = getType(value);
+		const emailMatcher = config.emailMatcher ||
+	 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+		console.log(config.emailMatcher)
+		invalid = type === 'email'? !(emailMatcher).test(val):false;
+	}
+
 </script>
 
 <svelte:options tag="json-editor-field"/>
@@ -74,14 +94,15 @@
 {#if !config.hideLabel}<label for={path}>{path}</label>{/if}
 	{#if getType(value) === 'textarea'}
 	<textarea on:blur={submit} {value} placeholder={path} id={path}/>
-	{:else if getType(value) === 'multiselect'}
+	<!-- {:else if getType(value) === 'multiselect'}
 		<select on:blur={submit} multiple placeholder={path} id={path} {value}>
 			{#each value as option}
 				<option value={option}>{option}</option>
 			{/each}
-		</select>
+		</select> -->
 	{:else}
-		<input on:blur={submit} on:change={submit} placeholder={path} id={path} type={getType(value)} value={getValue(value)} data-value={getValue(value)} checked={getType(value)}/>
+		<input on:input={validate} on:blur={submit} on:change={submit} placeholder={path} id={path} type={getType(value)} value={getValue(value)} data-value={getValue(value)} checked={getType(value)}/>
+		{#if invalid}Invalid {getType(value)}{/if}
 	{/if}
 
 </div>

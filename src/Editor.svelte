@@ -41,7 +41,7 @@ $:entries = Object.entries(value||{});
 		{/each}
 		<svelte:self value={val.filter(e=>!isObject(e))}  on:update={update} path={getPath(path,key)} {config}/>
 	{:else}
-	<Field on:fieldUpdated={update} path={getPath(path,key)} value={val} {config}/>
+	<Field on:fieldUpdated={update} path={getPath(path,key)} {key} value={val} {config}/>
 	{/if}
 {/each}
 
