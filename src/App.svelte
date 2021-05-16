@@ -17,7 +17,7 @@
 
 	let config = {hideLabel:false, emailMatcher:''};
 
-	let json = '{"date":"05.13.2021","password":"12212",\"associations\":[{\"group\":{\"id\":\"BMW\",\"name\":\"BMW\"},\"roles\":[{\"application\":{\"name\":\"dsBOARD\"},\"name\":\"user\"}]},{"asses2":{"name":"ass 2"}}],\"authentications\":[{\"type\":\"password\",\"value\":\"mackiemesser\"}],\"email\":\"theknife@dieplatte.org\",\"otherNames\":null,\"salutation\":\"Herr\",\"status\":\"Pending\",\"surname\":\"MacHeath\",\"title\":\"Prof.\",\"username\":\"mackiemesser\",\"userType\":\"Notary Assessor\","array":[1,2,3,4,5]}';
+	let json = '{"color":"#fb0404","range":"12","date":"05.13.2021","month":"", "week":"", "time":"12:22","password":"12212",\"associations\":[{\"group\":{\"id\":\"BMW\",\"name\":\"BMW\"},\"roles\":[{\"application\":{\"name\":\"dsBOARD\"},\"name\":\"user\"}]},{"asses2":{"name":"ass 2"}}],\"authentications\":[{\"type\":\"password\",\"value\":\"mackiemesser\"}],\"email\":\"theknife@dieplatte.org\",\"otherNames\":null,\"salutation\":\"Herr\",\"status\":\"Pending\",\"surname\":\"MacHeath\",\"title\":\"Prof.\",\"username\":\"mackiemesser\",\"userType\":\"Notary Assessor\","array":[1,2,3,4,5]}';
 	let parsed={};
 	let jsonError=false;
 

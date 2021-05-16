@@ -12,6 +12,8 @@
 	export let path = '';
 	export let key='';
 
+	const INPUT_TYPES = ['email','date','password','tel','url','month','week','time','search','color','range'];
+
 	let invalid=false;
 
 	const typeMapper = {
@@ -42,7 +44,7 @@
 	}
 
 	function byKey(){
-		return ['email','date','password'].find(_=> _ === key)
+		return INPUT_TYPES.find(_=> _ === key)
 
 	}
 
