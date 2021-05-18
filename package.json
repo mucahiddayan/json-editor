@@ -1,11 +1,23 @@
 {
-  "name": "svelte-app",
+  "name": "json-editor",
   "version": "1.0.0",
   "private": true,
+  "maintainers": [
+    "mucahiddayan@gmail.com"
+  ],
+  "author": {
+    "name": "Mücahid Dayan",
+    "email": "mucahiddayan@gmail.com",
+    "url": "https://mücahiddayan.com"
+  },
+  "repository": {
+    "url": "git@github.com:mucahiddayan/json-editor.git"
+  },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear"
+    "start": "sirv public --no-clear",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
@@ -20,5 +32,8 @@
   },
   "dependencies": {
     "sirv-cli": "^1.0.0"
-  }
+  },
+  "files": [
+    "public/build/bundle.js"
+  ]
 }
