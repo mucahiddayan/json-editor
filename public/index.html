@@ -9,9 +9,37 @@
     <link rel="icon" type="image/png" href="./favicon.png" />
     <link rel="stylesheet" href="./global.css" />
     <link rel="stylesheet" href="./build/bundle.css" />
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
     <script defer src="./build/bundle.js"></script>
+    <style>
+      :root {
+        --input-color: red;
+      }
+    </style>
+    <script>
+      let editor;
+      let json = {
+        color: "#ff0000",
+        date: "12/22/2022",
+        time: "12:33",
+        parent: { child1: { a: 2 } },
+      };
+      document.addEventListener("DOMContentLoaded", () => {
+        editor = document.querySelector("json-editor");
+        const preview = document.getElementById("preview");
+        editor.json = json;
+
+        editor.addEventListener("updated", ({ detail }) => {
+          console.log("detail", detail);
+          _.set(json, detail.path, detail.value);
+          preview.innerText = JSON.stringify(json);
+        });
+      });
+    </script>
   </head>
 
-  <body></body>
+  <body>
+    <json-editor></json-editor>
+    <pre id="preview"></pre>
+  </body>
 </html>
